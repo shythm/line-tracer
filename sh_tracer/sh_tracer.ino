@@ -99,12 +99,13 @@ void setup() {
 void loop() {
   static short pos_n = 0;
   static short pos_m = 0;
-  static float pos_k = 0.007f;
+  static float pos_k = 0.008f;
   static short sensor_dist[SENSOR_COUNT] = { -96, -32, 32, 96 };
-  static short velo = 75;
+  static short velo = 100;
   static float v_l = 0.0f;
   static float v_r = 0.0f;
 
+  Serial.println(" << Start driving >> ");
   for (;;) {
     // Normalization (Using constrain)
     for (int i = 0; i < SENSOR_COUNT; i++) {
@@ -113,7 +114,7 @@ void loop() {
       // https://www.arduino.cc/reference/ko/language/functions/math/map/
       sensor[i] = map(sensor[i], blackmax[i], whitemax[i], 0, 255);
     }
-    printSensor(sensor);
+//    printSensor(sensor);
     
     // Get position value
     pos_n = 0;
@@ -125,20 +126,21 @@ void loop() {
 
     if (pos_m == 0) position = 0;
     else position = pos_n / pos_m;
+    Serial.println(position);
 
     v_l = velo * (1.0f + (pos_k * position));
     v_l = constrain(v_l, 0, 255);
     v_r = velo * (1.0f - (pos_k * position));
     v_r = constrain(v_r, 0, 255);
 
-    if (v_l < 20) {
-      for (int i = 0; i < 10; i++)
-        analogWrite(MOTOR_LEFT, 255);
-    }
-    if (v_r < 20) {
-      for (int i = 0; i < 10; i++)
-        analogWrite(MOTOR_RIGHT, 255);
-    }
+//    if (v_l < 52) {
+//      analogWrite(MOTOR_LEFT, 255);
+//      delay(10);
+//    }
+//    if (v_r < 52) {
+//      analogWrite(MOTOR_RIGHT, 255);
+//      delay(10);
+//    }
 
     analogWrite(MOTOR_LEFT, v_l);
     analogWrite(MOTOR_RIGHT, v_r);

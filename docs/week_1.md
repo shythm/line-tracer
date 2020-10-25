@@ -56,21 +56,30 @@ TCRT5000 센서를 그대로 사용하면 외부 주변 회로(저항 등)들을
 
 ![schematic_cute](./img/schematic_cute.jpg)
 
+
+
 ### 전기의 기본
 
-### 노드 개념
 
-전원, 소자,
 
-브렌치: 소자
+### 브랜치, 노드 개념
+전기회로를 브레드보드로 구현하기 위해 브랜치와 노드 개념을 익혀야 한다.
+브랜치: 단순하게 말하면 회로의 각종 소자들이다. 전원(배터리), 저항 등이다.
+노드: 브랜치와 브랜치(소자와 소자)를 잇는 연결부이다.
 
-노드: 브렌치와 브렌치 사이. 소자를 지나지 않고 갈 수 있는 길
+![branch](./img/branch.png)
+![quiz_branch](./img/quiz_branch.jpg)
+![node](./img/node.jpg)
+![quiz_node](./img/quiz_node.jpg)
 
-https://m.blog.naver.com/PostView.nhn?blogId=gommy313&logNo=220894737323&proxyReferer=https:%2F%2Fwww.google.com%2F
+
+
+추가 참고: https://m.blog.naver.com/PostView.nhn?blogId=gommy313&logNo=220894737323&proxyReferer=https:%2F%2Fwww.google.com%2F
 
 ### 브레드보드
 
 우리는 5V를 각종 부품에 공급해주어야 한다. 하지만 아두이노에 나오는 5V 핀과 GND 핀은 그렇게 많지 않다. 그래서 우리는 5V 노드를 여러 갈래로 나누어야 하는데, 이를 도와주는 것이 브레드보드이다. 브레드보드의 각 구멍들은 금속 클립으로 한 노드로 연결되게 만들어준다. 브레드 보드에는 버스 영역과 IC 영역이 있는데 이 영역들은 다음 사진과 같다.
+![bread_board](./img/bread_board.png)
 
 
 
@@ -96,18 +105,55 @@ https://www.arduino.cc/en/Main/Software
 
 ![arduino_install_2](./img/arduino_install_2.png)
 
-### 테스트 코드
 
-제대로 잘 동작 하나요?
-
-(코드 링크)
 
 
 
 ## setup, loop 함수
+Arduino Sketch에 들어가면 기본적으로 setup()함수와 loop()함수가 적혀 있다. 아두이노가 프로그램을 실행할 때 기본적으로 가지는 틀이다. 프로그램이 시작하면 setup함수를 한 번 실행하고 그 다음에 loop함수를 반복하여 실행한다. 따라서 setup함수 내에 프로그램이 잘 동작하기 위한 초기 설정들을 입력해 주고, loop에는 주요 내용들을 입력하면 초기설정과 주요 내용을 구분하기 쉽다. 아래 예제를 보자.
+
 
 (예제) 헤어나올 수 없는 루프속으로
+```cpp
+// 1. 상단 메뉴에서 아두이노를 컴퓨터에 연결한다.
+// 2. 툴>포트>COM4 (Arduino Uno)선택    (COM5, COM6일 수도 있음)
+// 3. 아래 내용 작성
 
+void setup() {
+  Serial.begin(9600);         // 초기설정: 통신속도설정
+  Serial.println("setup!!");
+}
+
+int num=0;                    // 정수형 변수 num을 선언하고 0으로 초기화한다.
+void loop() {
+  Serial.print("loop~~~~~ ");
+  Serial.println(num++);        // num의 값을 프린트하고, num에 1을 더해준다.
+  delay(500);                 // 500ms = 0.5초 기다린다.
+}
+// 4. 상단 메뉴에서 파일>저장 혹은 Ctrl+S로 파일 저장
+// 5. 상단 아이콘에서 화살표 아이콘을 눌러 업로드한다.
+// 6. 업로드 완료되면 우측상단에서 돋보기 아이콘을 눌러 시리얼 모니터를 누른다.
+// 7. 시리얼 모니터 새 창이 뜨며 매 1초마다 Hello World!가 뜬다.
+```
+```
+출력:
+setup!!
+loop~~~~~ 0
+loop~~~~~ 1
+loop~~~~~ 2
+loop~~~~~ 3
+loop~~~~~ 4
+...
+```
+setup!!은 처음에 한 번만 출력되고 loop~~~~ 숫자 는 계속 출력된다. setup함수가 처음에 한 번 실행되고 그 후에는 loop함수가 계속 실행됨을 알 수 있다.
+
+더 해보기
+- Serial.println(num++);를 Serial.println(num);로 바꿔본다
+loop~~~~ 0이 반복해서 출력된다. num++을 해주지 않아서 num이 값이 증가하지 않고 계속 0으로 유지된다.
+- Serial.println(num++);를 Serial.print(num++);로 바꿔본다
+loop~~~~ 숫자 가 계속 출력된다. 숫자는 0부터 1씩 증가한다. 그러나 줄 나눔이 되지 않아서 loop~~~ 숫자가 한 줄에 이어서 출력된다.
+- delay(500)을 delay(1000)으로 바꿔본다.
+loop~~~~ 숫자 의 출력 주기가 1초가 된다. delay()함수는  입력 시간동안 기다린다. 단위는 ms단위이므로 delay(1000)은 매 loop마다 1초를 쉰다는 뜻이다.
 
 
 ## digitalWrite, digitalRead, delay 함수
@@ -116,27 +162,6 @@ https://www.arduino.cc/en/Main/Software
 
 (예제) 스위치의 매력에 빠져보아요.
 
-(딜레이)
-
-```cpp
-// 1. 상단 메뉴에서 아두이노를 컴퓨터에 연결한다.
-// 2. 툴>포트>COM4 (Arduino Uno)선택    (COM5, COM6일 수도 있음)
-// 3. 아래 내용 작성
-
-void setup() {        //초기설정
-  Serial.begin(9600); //통신속도 설정
-}
-
-void loop() {                     //초기설정 후 반복실행
-  Serial.println("Hello World!"); //헬로 월드 출력
-  delay(1000);                    //1000ms == 1초 쉬어가기
-}
-
-// 4. 상단 메뉴에서 파일>저장 혹은 Ctrl+S로 파일 저장, 파일명은 HelloWorld
-// 5. 상단 아이콘에서 화살표 아이콘을 눌러 업로드한다.
-// 6. 업로드 완료되면 우측상단에서 돋보기 아이콘을 눌러 시리얼 모니터를 누른다.
-// 7. 시리얼 모니터 새 창이 뜨며 매 1초마다 Hello World!가 뜬다.
-```
 
 
 
