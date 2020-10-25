@@ -1,18 +1,17 @@
 # Week 1
 
-<img src="./img/first_tracer_move.gif" alt="first_tracer_move" style="width:400px;" />
-
+<img src="./img/first_tracer_move.gif" alt="first_tracer_move" width="400px" />
 
 
 ## 라인트레이서를 시작하기 전에
 
 라인트레이서란 정해진 라인을 보고 따라가는 로봇이다. 사람이 직접 로봇을 조작하는 것이 아닌, 라인을 스스로 보고 주행하기 때문에 여러 분야에서 사용될 수 있다<del>(움직이는 쓰레기통도 만들 수 있고)</del>.
 
-<img src="./img/trashcan_line_tracer.gif" alt="trashcan_line_tracer" style="width:400px" />
+<img src="./img/trashcan_line_tracer.gif" alt="trashcan_line_tracer" width="400px" />
 
 물류 창고에서 바닥에 그려진 라인을 따라 물건을 운반하는 데 사용하거나 단거리 자율주행 자동차의 구현체가 될 수 있다. 이러한 라인트레이서를 만들기 위해 MCU를 사용하여 주변 하드웨어를 제어해야 하는데 처음 고성능 MCU를 접하기에는 여러 어려움이 존재한다. MCU 개발 보드 자체의 가격이 비쌀 뿐만 아니라 개발 환경을 구축하기 위해 여러 수고로움이 있기 때문이다. 그래서 나온 것이 아두이노.
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg" alt="arduino_img" style="width:400px;" />
+<img src="https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg" alt="arduino_img" width="400px" />
 
 아두이노는 가격이 저렴하고 개발 환경을 구축하기가 정말 쉽다. 아두이노 IDE를 설치하고 아두이노랑 컴퓨터를 USB와 연결해주기만 하면 개발 환경 구축 끝. 또한 아두이노를 위한 센서나 드라이버 모듈들이 잘 나와 있기 때문에 본인이 상상하는 여러 로봇의 프로토타입을 쉽고 빠르게 개발할 수 있다!
 
@@ -24,11 +23,11 @@
 
 바닥에 그려진 라인을 인식하기 위해서 수광 및 발광 센서를 사용한다.
 
-<img src="./img/ir_sensor_and_line.jpeg" alt="ir_sensor_and_line" style="width:400px;" />
+<img src="./img/ir_sensor_and_line.jpeg" alt="ir_sensor_and_line" width="400px" />
 
 둘 다 사람 눈에 보이지 않는 적외선 영역을 이용한다. 발광 센서가 적외선을 발생시키고 **적외선이 바닥에 얼마나 반사되는지를 수광 센서가 측정**한다. 일반적으로 어두운 영역에서는 빛을 흡수하기 때문에 수광 센서에 들어오는 값이 작다. 반면에 밝은 영역에서는 빛을 반사하기 때문에 수광 센서에 들어오는 값이 크다. 우리는 IR 수광 센서와 발광 센서가 하나의 세트로 된 TCRT5000 모듈을 사용한다.
 
-<img src="https://t1.daumcdn.net/cfile/tistory/991DAE495C00A3AD25" alt="TCRT5000" style="width:300px;" />
+<img src="https://t1.daumcdn.net/cfile/tistory/991DAE495C00A3AD25" alt="TCRT5000" width="300px" />
 
 TCRT5000 센서를 그대로 사용하면 외부 주변 회로(저항 등)들을 달아주어야 하는데, 주변 회로가 이미 구성되어 있는 모듈을 이용하면 편하다. TCRT5000 모듈에는 총 4개의 핀과 가변 저항 하나가 존재하는데, AO(Analog Output) 핀을 통해 수광 센서가 얼마나 빛을 감지했는지 알 수 있다. 그리고 전원 공급을 위한 VCC핀과 GND핀이 있다. 나머지 핀 하나는 DO(Digital Output)으로 일정 수치 이상으로 빛을 감지하면 이 핀에서 디지털 신호 1을 출력하고 그렇지 않으면 0을 출력한다. 일정 수치는 모듈의 가변 저항으로 조절이 가능하다. 우리는 연속적인 값이 필요하므로 DO 핀을 이용하지 않고 AO 핀만 이용한다. (참고로 이 모듈은 밝은 영역에서는 AO가 낮은값, 어두운 영역에서는 높은 값을 출력한다.)
 
@@ -38,7 +37,7 @@ TCRT5000 센서를 그대로 사용하면 외부 주변 회로(저항 등)들을
 
 아두이노 우노는 다음과 같이 생겼다.
 
-<img src="https://diyi0t.com/wp-content/uploads/2019/08/Arduino-Uno-Pinout-1.png" alt="arduino-pin-map" style="width: 600px;" />
+<img src="https://diyi0t.com/wp-content/uploads/2019/08/Arduino-Uno-Pinout-1.png" alt="arduino-pin-map" width="600px" />
 
 아두이노 우노 보드를 보면 오른쪽에 있는 초록색 영역이 디지털 핀을 꽂을 수 있는 영역이다. 디지털 핀에서는 디지털 신호를 출력하거나 입력받을 수 있다. 이때 디지털 신호란 두 가지의 상태만 가지는 신호이며 HIGH와 LOW 신호가 있다. 우리가 사용하는 아두이노에서는 HIGH 신호는 5V를 뜻하고 LOW 신호는 0V를 뜻한다.
 
@@ -52,7 +51,7 @@ TCRT5000 센서를 그대로 사용하면 외부 주변 회로(저항 등)들을
 
 모터를 구동하는데에는 높은 전압이 필요하다. 하지만 아두이노에는 높은 전압을 발생시킬 수 없기 때문에 작은 전압으로도 높은 전압을 제어할 수 있는 모터 드라이버가 필요하다. 모터 드라이버는 아두이노에서 신호를 받아 모터에 높은 전압을 인가시켜주는 역할을 해준다.
 
-<img src="https://3.bp.blogspot.com/-uBRqpfpvvaw/XSaKwnTcXGI/AAAAAAAAB7U/pdl6W5aE2Zs4oWUn7UNlagpO4buYRVYBACK4BGAYYCw/s1600/3.jpg" alt="L298N_module" style="width:400px;" />
+<img src="https://3.bp.blogspot.com/-uBRqpfpvvaw/XSaKwnTcXGI/AAAAAAAAB7U/pdl6W5aE2Zs4oWUn7UNlagpO4buYRVYBACK4BGAYYCw/s1600/3.jpg" alt="L298N_module" width="400px" />
 
 우리는 L298N이라는 모터 드라이버를 사용하는데 Dual-H Bridge를 탑재해 두 개의 DC 모터를 구동할 수 있으며 바퀴를 시계방향, 반시계방향으로 제어할 수 있다. H Bridge가 없었으면 모터를 일정한 방향으로만 구동해야 했다(물론, 우리의 로봇은 앞으로만 가면 되기 때문에 이는 필요 없다.)
 
@@ -68,7 +67,7 @@ TCRT5000 센서를 그대로 사용하면 외부 주변 회로(저항 등)들을
 
 ## 브레드보드 회로 구성 및 탐구
 
-<img src="./img/schematic_cute.jpg" alt="schematic_cute" style="width: 800px;" />
+<img src="./img/schematic_cute.jpg" alt="schematic_cute" width="800px" />
 
 
 
@@ -77,15 +76,15 @@ TCRT5000 센서를 그대로 사용하면 외부 주변 회로(저항 등)들을
 
 브랜치는 단순하게 말하면 회로의 각종 소자들이다. 전원(배터리), 저항 등이다.
 
-<img src="./img/branch.png" alt="branch" style="width:800px;" />
+<img src="./img/branch.png" alt="branch" width="800px" />
 
-<img src="./img/quiz_branch.jpg" alt="quiz_branch" style="width: 800px;" />
+<img src="./img/quiz_branch.jpg" alt="quiz_branch" width="800px" />
 
 노드는 브랜치와 브랜치(소자와 소자)를 잇는 연결부이다.
 
-<img src="./img/node.jpg" alt="node" style="width: 800px;" />
+<img src="./img/node.jpg" alt="node" width="800px" />
 
-<img src="./img/quiz_node.jpg" alt="quiz_node" style="width: 800px;" />
+<img src="./img/quiz_node.jpg" alt="quiz_node" width="800px" />
 
 [추가 참고 자료 #1](https://m.blog.naver.com/PostView.nhn?blogId=gommy313&logNo=220894737323&proxyReferer=https:%2F%2Fwww.google.com%2F)
 
@@ -95,15 +94,15 @@ TCRT5000 센서를 그대로 사용하면 외부 주변 회로(저항 등)들을
 
 우리는 5V를 각종 부품에 공급해주어야 한다. 하지만 아두이노에 나오는 5V 핀과 GND 핀은 그렇게 많지 않다. 그래서 우리는 5V 노드를 여러 갈래로 나누어야 하는데, 이를 도와주는 것이 브레드보드이다. 브레드보드의 각 구멍들은 금속 클립으로 한 노드로 연결되게 만들어준다. 브레드 보드에는 버스 영역과 IC 영역이 있는데 이 영역들은 다음 사진과 같다.
 
-<img src="./img/bread_board.png" alt="bread_board" style="width:500px;" />
+<img src="./img/bread_board.png" alt="bread_board" width="500px" />
 
 브레드보드를 사용하는 이유는 다음과 같다. 배터리, 각종 소자, 아두이노의 핀은 1개~2개로 한정되어 있다. 하나의 핀(노드)에 여러 전선들을 연결해야 하는데 납땜을 하지 않는 이상 점퍼선으로 꽂아서 잇는 데에는 한계가 있다. 그럴 때 브레드보드를 사용하면 한 노드에 핀을 여러 개 꽂을 수 있어서 편리하다.
 
-<img src="./img/diode1.png" alt="diode1" style="width:300px;" />
+<img src="./img/diode1.png" alt="diode1" width="300px" />
 
 배터리에 전구 하나만을 연결해야 할 때는 크게 문제가 되지 않는다. 그러나 다음과 같이 여러 개의 전구를 병렬로 연결해야 할 때에는 브레드 보드를 이용하면 좋다.
 
-<img src="./img/diode2.png" alt="diode2" style="width: 600px;" />
+<img src="./img/diode2.png" alt="diode2" width="600px" />
 
 
 
