@@ -1,6 +1,10 @@
 # Week 1
 
+아래의 움짤은 아두이노 라인트레이서 프로젝트의 프로토타입이다.
+
 <center><img src="./img/first_tracer_move.gif" alt="first_tracer_move" width="400px" /></center>
+
+
 
 
 ## 라인트레이서를 시작하기 전에
@@ -142,10 +146,10 @@ void setup() {
   Serial.println("setup!!");
 }
 
-int num=0;                    // 정수형 변수 num을 선언하고 0으로 초기화한다.
+int num = 0;                  // 정수형 변수 num을 선언하고 0으로 초기화한다.
 void loop() {
   Serial.print("loop~~~~~ ");
-  Serial.println(num++);        // num의 값을 프린트하고, num에 1을 더해준다.
+  Serial.println(num++);      // num의 값을 프린트하고, num에 1을 더해준다.
   delay(500);                 // 500ms = 0.5초 기다린다.
 }
 ```
@@ -160,7 +164,7 @@ loop~~~~~ 3
 loop~~~~~ 4
 ...
 ```
-setup!!은 처음에 한 번만 출력되고 loop~~~~ 숫자 는 계속 출력된다. setup함수가 처음에 한 번 실행되고 그 후에는 loop함수가 계속 실행됨을 알 수 있다.
+setup!!은 처음에 한 번만 출력되고 "loop\~\~\~\~ 숫자"는 계속 출력된다. setup함수가 처음에 한 번 실행되고 그 후에는 loop함수가 계속 실행됨을 알 수 있다.
 
 ### 더 해보기
 
@@ -172,31 +176,134 @@ setup!!은 처음에 한 번만 출력되고 loop~~~~ 숫자 는 계속 출력�
 
   ​	"loop\~\~\~\~ 숫자" 가 계속 출력된다. 숫자는 0부터 1씩 증가한다. 그러나 줄 나눔이 되지 않아서 "loop\~\~\~\~ 숫자"가 한 줄에 이어서 출력된다.
 
-- delay(500)을 delay(1000)으로 바꿔본다.
+- `delay(500);`을 `delay(1000);`으로 바꿔본다.
 
   ​	"loop\~\~\~\~ 숫자"의 출력 주기가 1초가 된다. delay()함수는  입력 시간동안 기다린다. 단위는 ms단위이므로 delay(1000)은 매 loop마다 1초를 쉰다는 뜻이다.
 
 
 
+## digitalWrite 함수
 
-## digitalWrite, digitalRead, delay 함수
+digitalWrite와 digitalRead 함수는 HIGH, LOW 신호를 생성하고 외부로부터 입력받을 수 있는 함수이다. digitalWrite 함수는 HIGH 또는 LOW 값을 디지털 핀에 출력하는데 그 전에 pinMode 함수를 통해 해당 디지털 핀을 OUTPUT으로 설정해야 한다.
 
-(예제) 부저를 일정 주기마다 소리내기.
+```cpp
+pinMode(10); // 10은 아두이노의 10번 디지털 핀을 의미한다.
+```
 
-(예제) 스위치의 매력에 빠져보아요.
+그리고 난 다음 digitalWrite 함수를 다음과 같이 사용하면 해당 핀에 5V를 발생시킬 수 있다.
+
+```cpp
+digitalWrite(10, HIGH); // 10번 핀에 5V 신호 발생
+```
+
+`HIGH` 대신에 `LOW`를 쓰면 해당 핀에 0V를 발생시킬 수 있다. 
+
+```cpp
+digitalWrite(10, LOW); // 10번 핀에 0V 신호 발생
+```
+
+다음 예제를 통해 더 자세히 알아보자.
 
 
 
+### (예제) 아두이노 내장 LED 작동시키기
 
-## 조건문 (if문)
+<center><img src="./img/arduino_led.jpg" alt="arduino_led" width="300px" /></center>
 
-(예제) 스위치와 부저를 이용해 피아노 만들기
+위의 사진에서 붉은 빛은 아두이노 우노에 내장되어 있는 LED에서 나오는 빛이다. 아두이노 내장 LED는 13번 핀으로 제어할 수 있다. 아두이노 우노의 GND에 LED의 짧은 다리가 연결되어 있고 긴 다리가 13번 핀에 연결되어 있다고 생각하면 된다. 따라서 13번 핀을 HIGH 상태로 만들면 5V와 GND 사이의 전위가 생성되어 전류가 흘러 LED가 작동한다. 반면에 13번 핀을 LOW 상태로 만들면 LED 양단의 전위차가 0이 되므로 전류가 흐르지 않아 LED가 작동하지 않는다. 다음 코드는 아두이노 내장 LED를 일정 주기마다 켰다 껐다 하는 코드이다.
+
+```cpp
+void setup() {
+  pinMode(13, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(13, HIGH);
+  delay(500);
+  digitalWrite(13, LOW);
+  delay(500);
+}
+```
+
+* 고찰
+  - HIGH 신호일 때 왜 LED는 빛이 날까?
+  - LOW 신호일 떄 왜 LED는 빛이 나지 않을까?
+  - `delay(500);`에서 500을 원하는 시간으로 바꾸어 보자.
+  - `delay(500);`을 `delay(1);`으로 바꾸어 보자, LED의 밝기가 왜 낮아졌을까?
+
+
+
+### (예제) 부저를 일정 주기마다 소리내기
+
+부저에는 능동 부저와 수동 부저가 있다. 능동 부저는 전위차만 형성시켜주면 소리가 나는 반면 수동 부저는 5V와 0V의 전위차를 주기적으로 발생시켜야 소리가 나온다. 스피커의 원리와 똑같다. 우리는 수동 부저를 이용할 것이다. 수동 부저의 한쪽에 13번 핀에, 나머지 한쪽에는 GND 핀에 연결한다. 어느쪽에 GND 핀을 연결하든 상관이 없다. 5V와 0V의 전위차를 주기적으로 발생시키기만 하면 되기 때문이다.
+
+<center><img src="./img/arduino_buzzer.jpg" alt="arduino_buzzer" width="300px" /></center>
+
+```cpp
+void setup() {
+  pinMode(13, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(13, HIGH);
+  delay(1);
+  digitalWrite(13, LOW);
+  delay(1);
+}
+```
+
+놀랍게도 아두이노 내장 LED를 켰다 껐다 하는 코드와 매우 흡사하다. 전위차를 발생시키는 것이 빛을 만들어 내기도 하고 소리도 만들어 낸다는 것이 흥미롭다.
+
+* 고찰
+
+  - `delay(1);`에서 1을 2로 늘려보고, 4로 늘려보자 왜 음이 점점 낮아질까?
+
+  - 아래의 코드를 업로드 해보자
+
+    ```cpp
+    void setup() {
+      pinMode(13, OUTPUT);
+    }
+    
+    void loop() {
+      digitalWrite(13, HIGH);
+    }
+    ```
+
+    소리가 나지 않는 이유는 무엇일까?
+
+
+
+### 더 해보기
+
+* 우리 라인트레이서에 digitalWrite 함수를 어디에 사용할 수 있을까?
+* 아두이노 tone() 함수에 대해 알아보자. [레퍼런스 링크](https://www.arduino.cc/reference/ko/language/functions/advanced-io/tone/)
+
+
+
+## digitalRead 함수와 조건문 (if문)
+
+### (예제) 스위치의 매력에 빠져보아요
+
+
+
+### (예제) 스위치와 부저를 이용해 피아노 만들기
+
+
+
+### 더 해보기
 
 
 
 ## 반복문 (for문)
 
-(예제) ?
+
+
+### (예제) ?
+
+
+
+### 더 해보기
 
 
 
