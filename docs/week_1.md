@@ -470,18 +470,124 @@ void loop() {
 * 시리얼 모니터에 어떤 버튼이 눌렸는지 출력해보자.
 * tone() 함수를 이용해서 더 정확한 음을 재생해보자.
 * 3개의 버튼을 이용해 동시 입력을 구현해보자. 동시 입력된 정보를 시리얼로 출력해보자.
+* `switch-case`문에 대해 조사해보자.
 
 
 
-## 반복문 (for문)
+## 반복문 (for문, while문)
+
+#### for문
+
+```cpp
+for (초기문; 조건문; 증감문) {
+  // 여기에 반복할 코드 작성
+}
+```
+
+for문은 다음과 같은 과정을 거친다.
+
+1. 변수를 초기화 한다(초기문에 있는 내용을 수행한다. 주로 `int i = 0`과 같이 변수를 초기화해준다.).
+
+2. 조건문에 있는 내용을 검사하여 참인지 확인한다. 참이면 코드 블럭을 실행한다.
+
+   2-1. 거짓이면 반복문을 탈출한다(코드 블럭을 실행하지 않고 빠져나온다.)
+
+3. 증감문에 있는 내용을 수행한다. (주로 `i++` 등을 많이 사용함.)
+
+4. 다시 2번으로 돌아간다.
 
 
 
-### (예제) ?
+만약 우리가 0번 핀부터 13번 핀까지 디지털 신호 HIGH를 줘야 한다고 생각해보자. 그렇다면 다음과 같이 코드를 작성할 수 있을 것이다.
+
+```cpp
+void setup() {
+  pinMode(0, OUTPUT);
+  pinMode(1, OUTPUT);
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT);
+  pinMode(4, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(7, OUTPUT);
+  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(12, OUTPUT);
+  pinMode(13, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(0, HIGH);
+  digitalWrite(1, HIGH);
+  digitalWrite(2, HIGH);
+  digitalWrite(3, HIGH);
+  digitalWrite(4, HIGH);
+  digitalWrite(5, HIGH);
+  digitalWrite(6, HIGH);
+  digitalWrite(7, HIGH);
+  digitalWrite(8, HIGH);
+  digitalWrite(9, HIGH);
+  digitalWrite(10, HIGH);
+  digitalWrite(11, HIGH);
+  digitalWrite(12, HIGH);
+  digitalWrite(13, HIGH);
+}
+
+```
+
+코드가 정말 길어진다. 만약 우리가 더 좋은 프로세서를 사용해서 GPIO가 100개정도 된다고 가정해보자. 그리고 100개의 GPIO를 모두 HIGH 상태로 만들어야 한다고 하면(물론 그럴 일은 많이 없지만) 어떻게 할 것인가? 그래서 나온 것이 반복문. 초기 값을 기준으로(초기문), 일정 조건에 만족하면(조건문) 작성한 코드를 반복한다. 위의 코드는 아래와 같이 간략하게 쓸 수 있다.
+
+```cpp
+void setup() {
+  for (int i = 0; i <= 13; i++) {
+    pinMode(i, OUTPUT);
+  }
+}
+
+void loop() {
+  for (int i = 0; i <= 13; i++) {
+    digitalWrite(i, HIGH);
+  }
+}
+```
+
+한편, GPIO라는 것을 배우게 되면 위의 코드보다 더욱 간략하게 할 수 있다. 아두이노 핀에 대해 더 자세히 알고 싶으면 GPIO에 대해 찾아보는 것을 추천한다.
 
 
 
-### 더 해보기
+#### while문
+
+```cpp
+while (조건) {
+  // 반복할 내용
+}
+```
+
+while 문은 loop 함수와 비슷한 역할을 한다. 다만 조건이 참일 때만 코드 블럭을 반복한다는 점이 loop 함수와는 다른점이다.
 
 
+
+#### 더 해보기
+
+* 스위치(버튼)을 달아서 버튼이 눌린 상태(down state)와 버튼이 올라간 상태(up state)를 while문을 이용해 판단해보자. 시리얼 모니터에 출력하되 상태가 한 번만 출력되어야 한다.
+
+  ```
+  (시리얼 모니터 출력 예제)
+  down state
+  up state
+  down state
+  up state
+  down state
+  up state
+  ```
+
+
+
+## 조건문과 반복문 더 알아보기
+
+[![동영상](http://img.youtube.com/vi/QIv7iml7Y9M/0.jpg)](https://youtu.be/QIv7iml7Y9M) 
+
+[유튜브 링크](https://www.youtube.com/watch?v=QIv7iml7Y9M)
 
