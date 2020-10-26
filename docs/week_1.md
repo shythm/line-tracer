@@ -395,7 +395,81 @@ void loop() {
 
 ## 조건문
 
+```cpp
+if (조건1) {
+    // 조건1이 참이면 실행할 statement
+} else if (조건2) {
+    // 조건2가 참이면 실행할 statement(조건1이 참이라면 이 statement는 무시된다.)
+} else {
+    // 조건1과 조건2가 둘 다 거짓일 때 실행할 statement
+}
+```
+
+조건문을 이용해 더 멋있는 프로그램을 작성할 수 있다.
+
+* 고찰
+  - 세 번째 조건(조건3)을 추가하려면 어떻게 해야할까?
+
+
+
 ### (예제) 스위치와 부저를 이용해 피아노 만들기
+
+아래와 같이 회로를 구성한다. 그리고 조건문과 digitalWrite, digitalRead 함수를 이용해 간단한 피아노를 만들어보자.
+
+**<회로도>**
+
+<center><img src="./img/arduino_piano.jpg" alt="arduino_piano" width="800px" /></center>
+
+**<소스 코드>**
+
+```cpp
+void setup() {
+  pinMode(7, OUTPUT); // 부저
+  pinMode(2, INPUT_PULLUP); // 소리1
+  pinMode(3, INPUT_PULLUP); // 소리2
+  pinMode(4, INPUT_PULLUP); // 소리3
+}
+
+void loop() {
+  if (digitalRead(2) == LOW) {
+    // 소리1 버튼이 눌렸을 때
+    digitalWrite(7, HIGH);
+    delay(1);
+    digitalWrite(7, LOW);
+    delay(1);
+  } else if (digitalRead(3) == LOW) {
+    // 소리2 버튼이 눌렸을 때
+    digitalWrite(7, HIGH);
+    delay(2);
+    digitalWrite(7, LOW);
+    delay(2);
+  } else if (digitalRead(4) == LOW) {
+    // 소리3 버튼이 눌렸을 때
+    digitalWrite(7, HIGH);
+    delay(3);
+    digitalWrite(7, LOW);
+    delay(3);
+  } else {
+    // 아무 버튼도 눌리지 않았을 때
+    digitalWrite(7, LOW);
+  }
+}
+```
+
+* 고찰
+  - 왜 아무 버튼도 눌리지 않았을 때 7번 핀에 LOW 신호를 줬을까? HIGH 신호를 줘도 되지 않을까?
+  - `digitalRead(2) == LOW`에서 왜 LOW 신호일 때를 조건으로 걸었을까?
+  - 변수를 사용해서 더 간단하게 작성할 수 있지 않을까?
+  - 아두이노의 tone() 함수를 통해 정확한 도, 레, 미 음을 재생할 수 있지 않을까?
+  - 버튼을 동시에 누르면 어떤 소리가 나는가? 소리1 버튼과 소리3 버튼을 눌렀을 때 소리1이 재생되고 소리1 버튼과 소리2 버튼을 눌렀을 떄에도 소리1이 재생된다. 왜 그럴까?
+
+
+
+### 더 해보기
+
+* 시리얼 모니터에 어떤 버튼이 눌렸는지 출력해보자.
+* tone() 함수를 이용해서 더 정확한 음을 재생해보자.
+* 3개의 버튼을 이용해 동시 입력을 구현해보자. 동시 입력된 정보를 시리얼로 출력해보자.
 
 
 
