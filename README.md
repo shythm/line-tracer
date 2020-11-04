@@ -2,7 +2,7 @@
 
 아두이노와 시중에 나와있는 모듈들(IR 센서, 모터, 모터 드라이버)을 활용한 간단한 라인트레이서이다.
 
-![first_tracer](./docs/img/first_tracer.jpeg)
+<img src="./docs/img/first_tracer.jpeg" alt="라인트레이서" width="500px"/>
 
 ## 사용 부품
 
@@ -14,6 +14,19 @@
 | 2wd RC car 프레임 스마트카  |                   | 1세트 | [구매 링크](https://smartstore.naver.com/kitplus/products/4437219694) / **프레임, 기어드 DC 모터와 바퀴 한 쌍 포함** |
 
 위의 부픔 외에 브레드 보드와 점퍼선이 필요하다. 추가적으로 글루건이 있으면 부품을 프레임에 붙이기 용이하다.
+
+## 교육 자료
+* [1주차](https://shythm.github.io/line-tracer/week_1): 조립 및 개발환경 구성 그리고 기초 다지기
+
+  * 이번 프로젝트의 개괄 및 부품 소개, 완성작품 동작 시연한다.
+  * 노드개념 익히기 및 브레드보드로 회로 구성할 수 있다.
+  * 아두이노를 연결하고 개발환경을 세팅한다.
+  * 아두이노 코딩을 위한 setup, loop(반복문)함수의 기능을 이해한다. (예제)
+  * 부저를 이용해 digitalWrite, delay함수의 기능을 이해한다. (예제)
+  * 버튼을 달아 if문으로 버튼이 눌렸는지 검사하고 버튼이 눌렸을 시에 부저로 소리를 발생시켜본다. (예제)
+  * 다음 시간에 사용할 for문을 미리 배워본다.
+
+* 2주차: 준비중
 
 ## 회로도
 ![schematic_cute](./docs/img/schematic_cute.jpg)
